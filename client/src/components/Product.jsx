@@ -28,7 +28,9 @@ const Product = ({ title, price, quantity }) => {
           <span>X</span>
         </button>
       </div>
-      {isEditFormVisible && <EditForm />}
+      {isEditFormVisible && (
+        <EditForm productInfo={{ title, price, quantity }} />
+      )}
     </li>
   );
 };

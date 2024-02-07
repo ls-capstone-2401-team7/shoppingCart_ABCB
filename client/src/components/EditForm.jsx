@@ -1,14 +1,29 @@
-const EditForm = () => {
+import { useState } from "react";
+
+const EditForm = ({ productInfo }) => {
+  const [name, setName] = useState(productInfo.title);
+  const [price, setPrice] = useState(productInfo.price);
+  const [quantity, setQuantity] = useState(productInfo.quantity);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const productUpdate = { title, price, quantity }; // update reference to name title
+    onSubmit(productUpdate);
+  };
+
+  // need to add onSubmit prop to <EditForm /> in Products.jsx and pass it down
+
   return (
     <div className="edit-form">
       <h3>Edit Product</h3>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="input-group">
           <label htmlFor="product-name">Product Name</label>
           <input
             type="text"
             id="product-name"
-            value="Apple 10.5-Inch iPad Pro"
+            onChange={(e) => setName(() => e.target.value)}
+            value={name}
             aria-label="Product Name"
           />
         </div>
@@ -18,7 +33,8 @@ const EditForm = () => {
           <input
             type="number"
             id="product-price"
-            value="649.99"
+            onChange={(e) => setPrice(() => e.target.value)}
+            value={price}
             aria-label="Product Price"
           />
         </div>
@@ -28,7 +44,8 @@ const EditForm = () => {
           <input
             type="number"
             id="product-quantity"
-            value="2"
+            onChange={(e) => setQuantity(() => e.target.value)}
+            value={quantity}
             aria-label="Product Quantity"
           />
         </div>
