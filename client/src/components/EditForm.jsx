@@ -1,17 +1,15 @@
 import { useState } from "react";
 
-const EditForm = ({ productInfo }) => {
-  const [name, setName] = useState(productInfo.title);
+const EditForm = ({ productInfo, onSubmit, onCancel }) => {
+  const [title, setTitle] = useState(productInfo.title);
   const [price, setPrice] = useState(productInfo.price);
   const [quantity, setQuantity] = useState(productInfo.quantity);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const productUpdate = { title, price, quantity }; // update reference to name title
-    onSubmit(productUpdate);
+    const productUpdate = { title, price, quantity };
+    onSubmit(productUpdate, productInfo._id);
   };
-
-  // need to add onSubmit prop to <EditForm /> in Products.jsx and pass it down
 
   return (
     <div className="edit-form">
@@ -22,8 +20,8 @@ const EditForm = ({ productInfo }) => {
           <input
             type="text"
             id="product-name"
-            onChange={(e) => setName(() => e.target.value)}
-            value={name}
+            onChange={(e) => setTitle(() => e.target.value)}
+            value={title}
             aria-label="Product Name"
           />
         </div>
@@ -52,7 +50,9 @@ const EditForm = ({ productInfo }) => {
 
         <div className="actions form-actions">
           <button type="submit">Update</button>
-          <button type="button">Cancel</button>
+          <button type="button" onClick={onCancel}>
+            Cancel
+          </button>
         </div>
       </form>
     </div>

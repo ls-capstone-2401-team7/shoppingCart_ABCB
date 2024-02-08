@@ -1,9 +1,22 @@
 import EditForm from "./EditForm.jsx";
 import { useState } from "react";
 
-const Product = ({ title, price, quantity }) => {
+const Product = ({ title, price, quantity, _id, onSubmit, onDelete }) => {
   const [isEditFormVisible, setIsEditFormVisible] = useState(false);
   let disabled = quantity === 0 ? true : false;
+
+  const handleSubmit = (productUpdate, id) => {
+    onSubmit(productUpdate, id);
+    setIsEditFormVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsEditFormVisible(false);
+  };
+
+  const handleDelete = () => {
+    onDelete(_id);
+  };
 
   return (
     <li className="product">
@@ -24,12 +37,16 @@ const Product = ({ title, price, quantity }) => {
             Edit
           </button>
         </div>
-        <button className="delete-button">
+        <button className="delete-button" onClick={handleDelete}>
           <span>X</span>
         </button>
       </div>
       {isEditFormVisible && (
-        <EditForm productInfo={{ title, price, quantity }} />
+        <EditForm
+          productInfo={{ title, price, quantity, _id }}
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+        />
       )}
     </li>
   );
