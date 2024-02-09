@@ -1,7 +1,33 @@
 import Product from "./Product.jsx";
 import AddProductForm from "./AddProductForm.jsx";
+import { useState } from "react";
+import EditableProduct from "./EditableProduct.jsx";
 
-const Main = ({products, isProductFormVisible, onSubmit, onAddProductSubmit, onCancel, onDelete, onShowProductForm}) => {
+const Main = ({
+  products,
+  onSubmit,
+  onAddProductSubmit,
+  onDelete,
+  onAddProductToCart,
+}) => {
+  const [isProductFormVisible, setIsProductFormVisible] = useState(false);
+
+  const handleAddProductSubmit = async (requestedProduct) => {
+    await onAddProductSubmit(requestedProduct);
+    // handle showing the new product form
+    setIsProductFormVisible(false);
+  };
+
+  // handle canceling a new product (i.e. don't show the new product form)
+  const handleCancel = () => {
+    setIsProductFormVisible(false);
+  };
+
+  // handle showing the new product form
+  const handleShowProductForm = () => {
+    setIsProductFormVisible((prevVisibility) => !prevVisibility);
+  };
+
   return (
     <main>
       <div className="product-listing">
@@ -9,18 +35,27 @@ const Main = ({products, isProductFormVisible, onSubmit, onAddProductSubmit, onC
         <ul className="product-list">
           {products.map((product) => {
             return (
-              <Product key={product._id} {...product} onSubmit={onSubmit} onDelete={onDelete}/>
+              <EditableProduct
+                key={product._id}
+                {...product}
+                onSubmit={onSubmit}
+                onDelete={onDelete}
+                onAddProductToCart={onAddProductToCart}
+              />
             );
           })}
         </ul>
       </div>
       {isProductFormVisible ? (
-        <AddProductForm onSubmit={onAddProductSubmit} onCancel={onCancel}/>
+        <AddProductForm
+          onSubmit={handleAddProductSubmit}
+          onCancel={handleCancel}
+        />
       ) : (
         <p>
           <button
             className="add-product-button"
-            onClick={onShowProductForm}
+            onClick={handleShowProductForm}
           >
             Add A Product
           </button>

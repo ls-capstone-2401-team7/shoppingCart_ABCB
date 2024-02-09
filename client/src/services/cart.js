@@ -5,16 +5,23 @@ export const getCart = async (signal) => {
   });
 
   return await response.json();
-}
+};
 
 export const addToCart = async (productIdToAdd) => {
+  const obj = { productId: productIdToAdd };
   const response = await fetch(`/api/add-to-cart`, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(productIdToAdd),
+    body: JSON.stringify(obj),
   });
 
-  return await response.json()
-}
+  return await response.json();
+};
+
+export const checkoutCart = async () => {
+  await fetch("/api/checkout", {
+    method: "post",
+  });
+};

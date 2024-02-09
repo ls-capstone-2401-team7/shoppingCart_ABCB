@@ -7,12 +7,11 @@ import {
   getProducts,
   updateProduct,
 } from "../services/products.js";
-import { addToCart, getCart } from "../services/cart.js";
+import { addToCart, checkoutCart, getCart } from "../services/cart.js";
 
 const App = () => {
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]);
-  const [isProductFormVisible, setIsProductFormVisible] = useState(false);
 
   // get current cart
   useEffect(() => {
@@ -82,15 +81,9 @@ const App = () => {
       setProducts((prevProducts) => {
         return [...prevProducts, newProduct];
       });
-      setIsProductFormVisible(false);
     } catch (e) {
       console.error(e);
     }
-  };
-
-  // handle canceling a new product (i.e. don't show the new product form)
-  const handleCancel = () => {
-    setIsProductFormVisible(false);
   };
 
   // handle deleting a product
@@ -103,11 +96,6 @@ const App = () => {
     } catch (e) {
       console.error(e);
     }
-  };
-
-  // handle showing the new product form
-  const handleShowProductForm = () => {
-    setIsProductFormVisible((prevVisibility) => !prevVisibility);
   };
 
   // START HERE --- NEED TO ADD THIS HANDLER TO THE MAIN COMPONENT
@@ -139,7 +127,7 @@ const App = () => {
 
         // if we didn't already have the item in the cart, add the item to the cart
         if (!isAlreadyInCart) {
-          newCart.append(updatedCartItem);
+          newCart.push(updatedCartItem);
         }
 
         return newCart;
@@ -149,17 +137,20 @@ const App = () => {
     }
   };
 
+  const handleCheckout = async () => {
+    await checkoutCart();
+    setCart([]);
+  };
+
   return (
     <div>
-      <Header cart={cart} />
+      <Header cart={cart} onCheckout={handleCheckout} />
       <Main
         products={products}
-        isProductFormVisible={isProductFormVisible}
         onSubmit={handleSubmit}
         onAddProductSubmit={handleAddProductSubmit}
-        onCancel={handleCancel}
         onDelete={handleDelete}
-        onShowProductForm={handleShowProductForm}
+        onAddProductToCart={handleAddProductToCart}
       />
     </div>
   );
